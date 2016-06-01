@@ -1,0 +1,15 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: maven
+    tag: '3.3.3-jdk-8-onbuild'
+
+inputs:
+- name: docdb-todo-app
+
+run:
+  path: bash
+  args: ['-c', 'export TERM=linux; cd documentdb-java-todo-app; mvn install --info;']
