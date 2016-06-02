@@ -2,4 +2,5 @@
 applications:
 - name: docdb-demo
   memory: 512M
-  path: target/azure-documentdb-java-sample-0.0.1-SNAPSHOT.war
+  path: build-docdb-todo-app/docdb-todo-app/target/azure-documentdb-java-sample-0.0.1-SNAPSHOT.war
+ 
