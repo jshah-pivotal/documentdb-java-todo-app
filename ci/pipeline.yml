@@ -1,0 +1,56 @@
+---
+jobs:
+
+- name: deploy-docdb-todo-app
+  public: true
+  serial: true
+  plan:
+    - get: docdb-todo-app
+      trigger: true
+    - task: build-docdb-todo-app
+      config:
+        platform: linux
+        image: "docker:///maven#3.3-jdk-8"
+        inputs:
+        - name: docdb-todo-app
+        run:
+          path: mvn
+          args: ["-f", "docdb-todo-app/pom.xml", "-s", "docdb-todo-app/ci/settings.xml", "-DskipTests=true", "package"]
+    - put: deploy-todo-app
+      params:
+        manifest: docdb-todo-app/manifest.yml
+
+
+
+resources:
+
+- name: docdb-todo-app
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/jshah-pivotal/documentdb-java-todo-app.git
+
+- name: deploy-todo-app
+  type: cf
+  source:
+    api: {{cf-endpoint}}
+    username: {{cf-user}}
+    password: {{cf-password}}
+    organization: {{cf-org}}
+    space: {{cf-space}}
+    skip_cert_check: false
+
+- name: ci-docker-image
+  type: docker-image
+  source:
+    repository: jshah/java-maven-pipeline
+    email: {{docker-hub-email}}
+    username: {{docker-hub-username}}
+    password: {{docker-hub-password}}
+
+- name: dockerfile-repo
+  type: git
+  source:
+    paths: [ "ci/Dockerfile" ]
+    branch: master
+    uri: https://github.com/jshah-pivotal/documentdb-java-todo-app.git
