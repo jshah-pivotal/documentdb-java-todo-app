@@ -40,14 +40,6 @@ resources:
     space: {{cf-space}}
     skip_cert_check: false
 
-- name: ci-docker-image
-  type: docker-image
-  source:
-    repository: jshah/java-maven-pipeline
-    email: {{docker-hub-email}}
-    username: {{docker-hub-username}}
-    password: {{docker-hub-password}}
-
 - name: dockerfile-repo
   type: git
   source:
